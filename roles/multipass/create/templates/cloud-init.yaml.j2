@@ -1,0 +1,7 @@
+users:
+  - default
+  - name: user
+    groups: users, admin
+    ssh_authorized_keys:
+      - {{ lookup('file', '{{ playbook_dir }}/.ssh/ansible.pub') }}
+    sudo: ALL=(ALL) NOPASSWD:ALL

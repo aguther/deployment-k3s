@@ -1,0 +1,2 @@
+[multipass]
+{{ groups['multipass'] | map('extract', hostvars, ['inventory_hostname']) | join('\n') }}

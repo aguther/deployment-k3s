@@ -1,0 +1,51 @@
+---
+- name: detect WSL
+  include_tasks: detect-wsl.yaml
+  when: '"WSL" in ansible_kernel'
+
+- name: get ip
+  shell: >
+    '{{ multipass_executable }}' info 
+    {{ inventory_hostname }} | grep IPv4 | awk '{print $2}' | xargs
+  register: multipass_info_out
+  delegate_to: 127.0.0.1
+
+- name: create multipass inventory directory
+  file:
+    path: "{{ playbook_dir }}/inventories/multipass"
+    state: directory
+  delegate_to: 127.0.0.1
+
+- name: create group_vars directory
+  file:
+    path: "{{ playbook_dir }}/inventories/multipass/group_vars"
+    state: directory
+  delegate_to: 127.0.0.1
+
+- name: create host_vars directory
+  file:
+    path: "{{ playbook_dir }}/inventories/multipass/host_vars"
+    state: directory
+  delegate_to: 127.0.0.1
+
+- name: create hosts
+  template:
+    src: "hosts.j2"
+    dest: "{{ playbook_dir }}/inventories/multipass/hosts"
+  run_once: true
+  delegate_to: 127.0.0.1
+
+- name: create group_vars
+  template:
+    src: "group_vars.yaml.j2"
+    dest: "{{ playbook_dir }}/inventories/multipass/group_vars/multipass.yaml"
+  run_once: true
+  delegate_to: 127.0.0.1
+
+- name: create host_vars
+  template:
+    src: "host_vars.yaml.j2"
+    dest: "{{ playbook_dir }}/inventories/multipass/host_vars/{{ inventory_hostname }}.yaml"
+  vars:
+    multipass_create_inventory_ip: "{{ multipass_info_out.stdout_lines[0] }}"
+  delegate_to: 127.0.0.1

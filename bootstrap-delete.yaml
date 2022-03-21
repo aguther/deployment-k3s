@@ -1,0 +1,9 @@
+---
+- hosts:
+    - multipass
+  vars:
+    - ansible_become: yes
+    - ansible_connection: local
+  roles:
+    - multipass/delete
+    - multipass/purge

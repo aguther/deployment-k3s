@@ -1,0 +1,21 @@
+---
+- hosts:
+    - localhost
+  vars:
+    - ansible_become: no
+    - ansible_connection: local
+  roles:
+    - ssh-bootstrap/create-key
+  tags:
+    - ssh
+
+- hosts:
+    - multipass
+  vars:
+    - ansible_become: yes
+    - ansible_connection: local
+  roles:
+    - multipass/delete
+    - multipass/purge
+    - multipass/create
+    - multipass/create-inventory

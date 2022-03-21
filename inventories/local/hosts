@@ -1,0 +1,15 @@
+[all]
+localhost
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[multipass]
+k3s-1
+k3s-2
+k3s-3
+
+[multipass:vars]
+multipass_cpus=1
+multipass_mem=1G
+multipass_disk=5G

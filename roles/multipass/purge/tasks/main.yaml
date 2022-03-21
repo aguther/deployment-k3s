@@ -1,0 +1,11 @@
+---
+- name: detect WSL
+  include_tasks: detect-wsl.yaml
+  when: '"WSL" in ansible_kernel'
+
+- name: purge instances
+  shell: >
+    '{{ multipass_executable }}' purge
+  delegate_to: 127.0.0.1
+  run_once: true
+  ignore_errors: true

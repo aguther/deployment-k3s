@@ -1,0 +1,9 @@
+---
+- hosts:
+    - multipass
+  tasks:
+    - name: print ip from k3s
+      shell: "uname -a"
+      register: uname_out
+    - debug:
+        var: uname_out.stdout_lines

@@ -1,0 +1,11 @@
+---
+- name: detect WSL
+  include_tasks: detect-wsl.yaml
+  when: '"WSL" in ansible_kernel'
+
+- name: delete instance
+  shell: >
+    '{{ multipass_executable }}' delete
+    {{ inventory_hostname }}
+  delegate_to: 127.0.0.1
+  ignore_errors: true

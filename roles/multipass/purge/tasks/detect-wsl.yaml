@@ -1,0 +1,5 @@
+---
+- name: detect WSL
+  set_fact:
+    multipass_executable: "/mnt/c/Program Files/Multipass/bin/multipass.exe"
+  delegate_to: 127.0.0.1

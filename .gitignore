@@ -1,0 +1,8 @@
+inventories/multipass/
+docker-images/
+.kube/
+.ssh/
+./files/
+**/.vagrant
+*.retry
+*.log
