@@ -1,24 +1,12 @@
 ---
-- name: get temp directory
+- name: get directory for WSL
   shell: >
-    /mnt/c/Windows/System32/cmd.exe /C "echo %TEMP%"
-  register: multipass_create_temp_directory
-  changed_when: false
-  delegate_to: 127.0.0.1
-
-- name: store temp directory
-  set_fact:
-    multipass_temp_directory: "{{ multipass_create_temp_directory.stdout_lines[0] }}"
-  delegate_to: 127.0.0.1
-
-- name: get temp directory for WSL
-  shell: >
-    wslpath $(/mnt/c/Windows/System32/cmd.exe /C "echo %TEMP%")
+    wslpath {{ multipass_create_temp_directory }}
   register: multipass_create_temp_directory_wsl
   changed_when: false
   delegate_to: 127.0.0.1
 
-- name: store temp directory for WSL
+- name: store directory for WSL
   set_fact:
     multipass_temp_directory_wsl: "{{ multipass_create_temp_directory_wsl.stdout_lines[0] }}"
   delegate_to: 127.0.0.1

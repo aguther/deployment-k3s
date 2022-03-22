@@ -1,4 +1,4 @@
 ---
 multipass_executable: multipass
-multipass_temp_directory: /tmp
-multipass_temp_directory_wsl: /tmp
+multipass_temp_directory: "{{ playbook_dir }}/.cloud-init"
+multipass_temp_directory_wsl: "{{ playbook_dir }}/.cloud-init"

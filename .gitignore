@@ -1,8 +1,12 @@
-inventories/multipass/
-docker-images/
+# directories
+.files/
+.cloud-init/
 .kube/
 .ssh/
-./files/
-**/.vagrant
-*.retry
+docker-images/
+inventories/multipass/
+
+# files
 *.log
+*.retry
+**/.vagrant

@@ -1,0 +1,77 @@
+---
+- name: copy k3s
+  copy:
+    src: "{{ playbook_dir }}/.files/k3s"
+    dest: /usr/local/bin/k3s
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: create directory for airgap images
+  file:
+    path: /var/lib/rancher/k3s/agent/images/
+    state: directory
+
+- name: copy airgap images
+  copy:
+    src: "{{ playbook_dir }}/.files/k3s-airgap-images-amd64.tar.gz"
+    dest: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-amd64.tar.gz
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: check if k3s kube config is already existing
+  stat:
+    path: /etc/rancher/k3s/k3s.yaml
+  register: k3s_kube_config
+
+- name: copy k3s install script
+  copy:
+    src: "{{ playbook_dir }}/.files/k3s-install.sh"
+    dest: /tmp/k3s-install.sh
+    owner: root
+    group: root
+    mode: '0755'
+  when: not k3s_kube_config.stat.exists
+
+- name: copy k3s install script
+  shell: >
+    INSTALL_K3S_SKIP_DOWNLOAD=true /tmp/k3s-install.sh
+  when: not k3s_kube_config.stat.exists
+
+- name: clean up install script
+  file:
+    dest: /tmp/k3s-install.sh
+    state: absent
+  when: not k3s_kube_config.stat.exists
+
+- name: adapt kube config
+  file:
+    path: /etc/rancher/k3s/k3s.yaml
+    mode: '0644'
+
+- name: check if helm is already existing
+  stat:
+    path: /usr/local/bin/helm
+  register: helm_executable
+
+- name: unarchive helm into temp directory
+  unarchive:
+    src: "{{ playbook_dir }}/.files/helm-v3.8.1-linux-amd64.tar.gz"
+    dest: /tmp
+  when: not helm_executable.stat.exists
+
+- name: copy helm
+  copy:
+    src: /tmp/linux-amd64/helm
+    dest: /usr/local/bin/helm
+    owner: root
+    group: root
+    mode: '0755'
+    remote_src: yes
+  when: not helm_executable.stat.exists
+
+- name: clean up temp directory
+  file:
+    dest: /tmp/linux-amd64
+    state: absent
