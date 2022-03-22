@@ -1,14 +1,14 @@
 ---
-- name: get directory for WSL
+- name: get directory for Windows
   shell: >
-    wslpath {{ multipass_create_temp_directory }}
-  register: multipass_create_temp_directory_wsl
+    wslpath -w {{ multipass_temp_directory_wsl }}
+  register: multipass_create_temp_directory
   changed_when: false
   delegate_to: 127.0.0.1
 
-- name: store directory for WSL
+- name: store directory for Windows
   set_fact:
-    multipass_temp_directory_wsl: "{{ multipass_create_temp_directory_wsl.stdout_lines[0] }}"
+    multipass_temp_directory: "{{ multipass_create_temp_directory.stdout_lines[0] }}"
   delegate_to: 127.0.0.1
 
 - name: detect WSL

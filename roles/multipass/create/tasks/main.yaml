@@ -1,13 +1,13 @@
 ---
-- name: detect WSL
-  include_tasks: detect-wsl.yaml
-  when: '"WSL" in ansible_kernel'
-
 - name: create cloud init directory
   file:
     path: "{{ multipass_temp_directory }}"
     state: directory
   delegate_to: 127.0.0.1
+
+- name: detect WSL
+  include_tasks: detect-wsl.yaml
+  when: '"WSL" in ansible_kernel'
 
 - name: create cloud init directory
   file:
