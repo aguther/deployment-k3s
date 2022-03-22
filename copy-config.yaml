@@ -1,0 +1,5 @@
+---
+- hosts:
+    - multipass[0]
+  roles:
+    - k3s/copy-config
